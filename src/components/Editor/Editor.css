@@ -1,0 +1,18 @@
+.displayFlex{
+  display: flex !important;
+}
+.FlexRow{
+  flex-direction: row;
+}
+.FlexRowRev{
+  flex-direction: row-reverse;
+}
+.FlexSpaceBetween{
+  justify-content: space-between !important;
+}
+.spaceOut{
+  padding: 0px 10px;
+}
+.tagEditor{
+  width: 300px;
+}
