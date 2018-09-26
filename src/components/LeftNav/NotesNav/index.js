@@ -5,7 +5,6 @@ import ListItem from "@material-ui/core/ListItem";
 import { connect } from "react-redux";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
 import { createMuiTheme } from "@material-ui/core/styles";
 import SendIcon from "@material-ui/icons/Send";
 import ClassIcon from "@material-ui/icons/Class";
@@ -16,8 +15,6 @@ import {makeNoteActive} from "../../Redux/Actions";
 class NotesNav extends React.Component {
  
   selectNote = (id)=>{
-    console.log('asdf');
-    console.log(id);
     const {dispatch} = this.props;
     if(id){
       dispatch(makeNoteActive(id))
@@ -25,8 +22,10 @@ class NotesNav extends React.Component {
   }
 
   render() {
-    const { notes, sortedNoteId } = this.props.notes;
-    const theme = createMuiTheme();
+    let { notes, sortedNoteId } = this.props.notes;
+    if(sortedNoteId.length ===0){
+      sortedNoteId = Object.keys(notes);
+    }
     return (
       <div>
         {sortedNoteId.length > 0 &&
@@ -43,7 +42,7 @@ class NotesNav extends React.Component {
               </ListItem>
             );
           })}
-          {sortedNoteId.length == 0 &&
+          {sortedNoteId.length === 0 &&
             <div className="placeHolderContainer">
                 <ClassIcon  className="placeHolderIcon"/>
                 <p>

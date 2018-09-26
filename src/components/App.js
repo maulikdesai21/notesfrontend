@@ -98,18 +98,18 @@ class App extends Component {
   }
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
-    const { classes, notes, user,dispatch } = this.props;
-    const { name, token, authenticationError, authenticating } = user;
+    const {  notes, user,dispatch } = this.props;
+    const {  authenticationError, authenticating } = user;
     if (this.props.user.token !== prevProps.user.token) {
-
-        notes.token = this.props.user.token;
-        dispatch(postLoadNotesToServer(notes));
-      
+        if(this.props.user.token){
+          notes.token = this.props.user.token;
+          dispatch(postLoadNotesToServer(notes));
+        } 
     }
   }
   render() {
     const { classes, notes, user } = this.props;
-    const { name, token, authenticationError, authenticating } = user;
+    const { name, token, authenticationError } = user;
     return (
       <div>
         <ResponsiveDrawer

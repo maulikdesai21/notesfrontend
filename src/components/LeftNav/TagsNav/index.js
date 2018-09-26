@@ -7,16 +7,40 @@ import FileExplorerTheme from "react-sortable-tree-theme-file-explorer";
 import Divider from "@material-ui/core/Divider";
 import { createMuiTheme } from "@material-ui/core/styles";
 import {filterNotes} from '../../Redux/Actions'
-class TagNav extends React.Component {
-  constructor(props) {
-    super(props);
+function findUnTaggedNote(notes){
+  let ids = [];
+  for(let noteId in notes){
+    if(notes[noteId].tags.length === 0){
+      ids.push(noteId);
+    }
   }
-  tagSelected =  ({title})=>{
-    const { notes,dispatch } = this.props;
-    const { tags } = notes;
-    let ids =  tags[title];
+  return ids;
+}
 
-    dispatch(filterNotes(ids));
+class TagNav extends React.Component {
+  tagSelected =  ({title})=>{
+    const { dispatch } = this.props;
+    const { tags,notes } = this.props.notes;
+    let ids = [];
+    switch (title){
+      case "All Notes":{
+        ids = Object.keys(notes);
+        break;
+      }
+      case "Un Tagged":{
+        ids = findUnTaggedNote(notes)
+        break;
+      }
+    
+      default:{
+         ids =  tags[title];
+      }
+    }
+   
+    if(ids.length>0){
+      dispatch(filterNotes(ids));
+    }
+  
   }
 
   render() {
@@ -26,9 +50,8 @@ class TagNav extends React.Component {
           title: "Notes",
           expanded: true,
           children: [
-            { title: "UnTagged" },
-            { title: "ToDo" },
-            { title: "Today" }
+            { title: "All Notes" },
+            { title: "Un Tagged" }
           ]
         }
       ]
@@ -73,8 +96,7 @@ class TagNav extends React.Component {
                     cursor: `pointer`
                   },
                   onClick: () => {
-                    console.log(node);
-                    console.log(path);
+                    this.tagSelected(node)
                   }
                 };
               }

@@ -1,8 +1,7 @@
-import { withStyles } from "@material-ui/core/styles";
 import React from "react";
 import RichTextEditor from "./RichTextEditor";
 import { connect } from "react-redux";
-import { saveNoteLocalStorage,deleteNoteFromLocalStorage } from "../Redux/Actions";
+import { saveNoteLocalStorage,deleteNoteFromLocalStorage,saveNoteToDataBase,deleteNoteFromDataBase } from "../Redux/Actions";
 
 import "./Editor.css";
 class Editor extends React.Component {
@@ -17,6 +16,9 @@ class Editor extends React.Component {
           note={note}
           currentWorkingNote={currentWorkingNote}
           deleteNoteFromLocalStorage = {deleteNoteFromLocalStorage}
+          user={this.props.user}
+          saveNoteToDataBase={saveNoteToDataBase}
+          deleteNoteFromDataBase={deleteNoteFromDataBase}
         />
       </div>
     );
@@ -24,5 +26,6 @@ class Editor extends React.Component {
 }
 
 export default connect(state => ({
-  notes: state.notes
+  notes: state.notes,
+  user:state.user
 }))(Editor);

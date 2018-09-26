@@ -59,30 +59,55 @@ class RichTextEditor extends React.Component {
   };
   save = () => {
     const { value, tags } = this.state;
-    const { saveNoteLocalStorage, dispatch, currentWorkingNote } = this.props;
-    dispatch(
-      saveNoteLocalStorage({
-        noteType: "RICH_TEXT",
-        richText: value.toJSON(),
-        tags,
-        id: currentWorkingNote,
-        plainText: Plain.serialize(value)
-      })
-    );
+    const { saveNoteLocalStorage, dispatch, currentWorkingNote,user,saveNoteToDataBase } = this.props;
+    
+    const {token} = user;
+    if(token){
+      dispatch(
+        saveNoteToDataBase({
+          noteType: "RICH_TEXT",
+          richText: value.toJSON(),
+          tags,
+          id: currentWorkingNote,
+          plainText: Plain.serialize(value),
+          token
+        })
+      );
+    }else{
+      dispatch(
+        saveNoteLocalStorage({
+          noteType: "RICH_TEXT",
+          richText: value.toJSON(),
+          tags,
+          id: currentWorkingNote,
+          plainText: Plain.serialize(value)
+        })
+      );
+    }
+
   };
   delete = () => {
     const {
       deleteNoteFromLocalStorage,
       dispatch,
-      currentWorkingNote
+      currentWorkingNote,
+      user,
+      deleteNoteFromDataBase
     } = this.props;
+    const {token} = user;
     const { value } = this.state;
-
-    dispatch(deleteNoteFromLocalStorage(currentWorkingNote));
+    if(token){
+      dispatch(deleteNoteFromDataBase(currentWorkingNote,token));
+    }else{
+      dispatch(deleteNoteFromLocalStorage(currentWorkingNote));
+    }
+  
   };
+
   handleChange = tags => {
     this.setState({ tags });
   };
+
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
     if (prevProps.currentWorkingNote !== this.props.currentWorkingNote) {
@@ -92,7 +117,6 @@ class RichTextEditor extends React.Component {
           tags: []
         });
       }else{
-        console.log(this.props.note)
         this.setState({
           value: Value.fromJSON(this.props.note.richText),
           tags: this.props.note.tags
