@@ -107,12 +107,12 @@ export function deleteNoteFromDataBase(id,token){
           headers: { Authorization: "Bearer " + token }
         }
       );
-      return {
+      dispatch( {
         type: DELETE_NOTE_FROM_DATABASE,
         data: {
           id
         }
-      }
+      })
     }catch(err){
       console.log(err);
     }

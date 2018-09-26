@@ -59,10 +59,16 @@ class RichTextEditor extends React.Component {
   };
   save = () => {
     const { value, tags } = this.state;
-    const { saveNoteLocalStorage, dispatch, currentWorkingNote,user,saveNoteToDataBase } = this.props;
-    
-    const {token} = user;
-    if(token){
+    const {
+      saveNoteLocalStorage,
+      dispatch,
+      currentWorkingNote,
+      user,
+      saveNoteToDataBase
+    } = this.props;
+
+    const { token } = user;
+    if (token) {
       dispatch(
         saveNoteToDataBase({
           noteType: "RICH_TEXT",
@@ -73,7 +79,7 @@ class RichTextEditor extends React.Component {
           token
         })
       );
-    }else{
+    } else {
       dispatch(
         saveNoteLocalStorage({
           noteType: "RICH_TEXT",
@@ -84,7 +90,6 @@ class RichTextEditor extends React.Component {
         })
       );
     }
-
   };
   delete = () => {
     const {
@@ -94,14 +99,13 @@ class RichTextEditor extends React.Component {
       user,
       deleteNoteFromDataBase
     } = this.props;
-    const {token} = user;
-    const { value } = this.state;
-    if(token){
-      dispatch(deleteNoteFromDataBase(currentWorkingNote,token));
-    }else{
+    const { token } = user;
+
+    if (token) {
+      dispatch(deleteNoteFromDataBase(currentWorkingNote, token));
+    } else {
       dispatch(deleteNoteFromLocalStorage(currentWorkingNote));
     }
-  
   };
 
   handleChange = tags => {
@@ -116,7 +120,7 @@ class RichTextEditor extends React.Component {
           value: Value.fromJSON(defaultText),
           tags: []
         });
-      }else{
+      } else {
         this.setState({
           value: Value.fromJSON(this.props.note.richText),
           tags: this.props.note.tags
@@ -219,6 +223,9 @@ class RichTextEditor extends React.Component {
         return <li {...attributes}>{children}</li>;
       case "numbered-list":
         return <ol {...attributes}>{children}</ol>;
+      default: {
+        return <span>{children}</span>;
+      }
     }
   };
 
@@ -234,6 +241,9 @@ class RichTextEditor extends React.Component {
         return <em {...attributes}>{children}</em>;
       case "underlined":
         return <u {...attributes}>{children}</u>;
+      default: {
+        return <span>{children}</span>;
+      }
     }
   };
 

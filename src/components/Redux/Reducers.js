@@ -58,7 +58,6 @@ function addIdToTagMap(OldMap, tags, id) {
   return tagMap;
 }
 function removeIdFromMap(OldMap, id) {
-  debugger;
   let tagMap = OldMap;
   for (let tagId in tagMap) {
     let tag = tagMap[tagId];

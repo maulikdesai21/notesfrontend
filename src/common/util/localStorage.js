@@ -1,6 +1,6 @@
 export const loadState = () => {
   try{
-    const serializedState = sessionStorage.getItem('state');
+    const serializedState = localStorage.getItem('state');
     if(serializedState===null){
       return undefined;
     }
@@ -14,12 +14,12 @@ export const loadState = () => {
 export const saveState = (state) =>{
   try{
     const serializedState = JSON.stringify(state);
-    sessionStorage.setItem('state',serializedState);
+    localStorage.setItem('state',serializedState);
   }catch(err){
     // Ignore for now
   }
 }
 
 export const clearState = () =>{
-  sessionStorage.clear();
+  localStorage.clear();
 }
