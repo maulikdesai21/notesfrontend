@@ -60,10 +60,9 @@ class RichTextEditor extends React.Component {
   save = () => {
     const { value, tags } = this.state;
     const { saveNoteLocalStorage, dispatch, currentWorkingNote } = this.props;
-    console.log(tags);
     dispatch(
       saveNoteLocalStorage({
-        notesType: "RICH_TEXT",
+        noteType: "RICH_TEXT",
         richText: value.toJSON(),
         tags,
         id: currentWorkingNote,

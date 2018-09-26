@@ -9,7 +9,9 @@ import Editor from "./Editor";
 import {
   createNewNote,
   authenticateUser,
-  authenticationErrorAck
+  authenticationErrorAck,
+  logoutUser,
+  postLoadNotesToServer
 } from "./Redux/Actions";
 import Modal from "@material-ui/core/Modal";
 import Typography from "@material-ui/core/Typography";
@@ -90,6 +92,21 @@ class App extends Component {
       this.handleClose();
     }
   };
+  logout = () =>{
+    const { dispatch } = this.props;
+    dispatch(logoutUser());
+  }
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    const { classes, notes, user,dispatch } = this.props;
+    const { name, token, authenticationError, authenticating } = user;
+    if (this.props.user.token !== prevProps.user.token) {
+
+        notes.token = this.props.user.token;
+        dispatch(postLoadNotesToServer(notes));
+      
+    }
+  }
   render() {
     const { classes, notes, user } = this.props;
     const { name, token, authenticationError, authenticating } = user;
@@ -101,6 +118,8 @@ class App extends Component {
           createNewNote={this.createNewNote}
           LeftNav={LeftNav}
           Editor={Editor}
+          token={token}
+          logout={this.logout}
         />
         <Modal
           aria-labelledby="simple-modal-title"

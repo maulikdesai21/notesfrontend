@@ -7,9 +7,19 @@ import {
   AUTHENTICATION_ERROR,
   AUTHENTICATING_USER,
   AUTHENTICATION_SUCCESS,
-  AUTHENTICATION_ERROR_ACK
+  AUTHENTICATION_ERROR_ACK,
+  LOGOUT_USER,
+  MERGE_NOTES
 } from "./Actions";
 
+function createTagMap(serverNotes){
+  let tagMap = {}
+  for(let key of Object.keys(serverNotes)){
+    let note = serverNotes[key];
+    tagMap = addIdToTagMap(tagMap,note.tags,note.id)
+  }
+  return tagMap;
+}
 function addIdToTagMap(OldMap, tags, id) {
 
   let tagMap = OldMap;
@@ -128,6 +138,18 @@ export function notes(
         currentWorkingNote: action.data.currentWorkingNote
       };
     }
+    case MERGE_NOTES:{
+      let serverNotes = action.data.notes
+      return{
+        notes:serverNotes,
+        localNotes: [],
+        serverNotes: Object.keys(serverNotes),
+        sortedNoteId: [],
+        isFetching: false,
+        currentWorkingNote: null,
+        tags: createTagMap(serverNotes)
+      }
+    }
     default:
       return state;
   }
@@ -155,13 +177,19 @@ export function user(
       }
 
     }
-    case AUTHENTICATION_ERROR:{
+    case AUTHENTICATION_SUCCESS:{
       return{
         ...state,
         ...action.data
       }
     }
     case AUTHENTICATION_ERROR_ACK:{
+      return{
+        ...state,
+        ...action.data
+      }
+    }
+    case LOGOUT_USER:{
       return{
         ...state,
         ...action.data

@@ -70,7 +70,7 @@ class ResponsiveDrawer extends React.Component {
   };
 
   render() {
-    const { classes, theme, LeftNav, Editor,createNewNote,openModal,handleClose} = this.props;
+    const { classes, theme, LeftNav, Editor,createNewNote,openModal,handleClose,token,logout} = this.props;
 
     const drawer = (
       <div>
@@ -96,9 +96,17 @@ class ResponsiveDrawer extends React.Component {
               <Grid container >
                 <Grid className="displayFlex FlexSpaceBetween" item xs={8}>
                   <span style={{fontSize:24}}>Haven Life Notes </span>
-                  <Button variant="contained" color="secondary" onClick={openModal} className={classes.button}>
-                    Login
-                  </Button>
+                  {!token &&
+                    <Button variant="contained" color="secondary" onClick={openModal} className={classes.button}>
+                      Login
+                    </Button>
+                  }
+                  {token &&
+                    <Button variant="contained" color="secondary" onClick={logout} className={classes.button}>
+                      Logout
+                    </Button>
+                  }
+                  
 
                 </Grid>
                 <Grid item xs={4}>
